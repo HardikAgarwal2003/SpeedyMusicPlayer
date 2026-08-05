@@ -11,4 +11,11 @@
 5. Added Colors and custom TextStyles
    - added file custom_text_style.dart under utils dir.
    - added file app_color.dart under constants dir.
-6. 
+6. Create Local_Song model under lib/model.
+   - will contain the required fields for the local song to use in UI.
+7. Create Audio Controller class 
+   - will be responsible to control actions for the music like play, pause, next, previous, etc.
+
+
+
+## Add in next commit - Added Colors and custom TextStyles
