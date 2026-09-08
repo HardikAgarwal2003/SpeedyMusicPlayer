@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -8,6 +6,8 @@ import 'package:marquee/marquee.dart';
 import 'package:speedy_music_player/constants/app_colors.dart';
 import 'package:speedy_music_player/controller/audio_controller.dart';
 import 'package:speedy_music_player/widgets/my_button.dart';
+
+import '../screens/player_screen.dart';
 
 class BottomPlayer extends StatelessWidget {
   const BottomPlayer({super.key});
@@ -24,7 +24,7 @@ class BottomPlayer extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             // here we navigate to player screen
-            /*Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerScreen()));*/
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerScreen(index: currentIndex, song: currentSong,)));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class BottomPlayer extends StatelessWidget {
                         baseBarColor: Colors.black26,
                         bufferedBarColor: Colors.black12,
                         thumbColor: Color(0xFF4A5668),
-                        barHeight: 3,
+                        barHeight: 8,
                         thumbRadius: 6,
                         timeLabelLocation: TimeLabelLocation.none,
                         onSeek: (duration) {

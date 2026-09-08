@@ -1,0 +1,136 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:lottie/lottie.dart';
+import 'package:marquee/marquee.dart';
+import 'package:speedy_music_player/constants/app_colors.dart';
+import 'package:speedy_music_player/controller/audio_controller.dart';
+import 'package:speedy_music_player/model/local_song_model.dart';
+import 'package:speedy_music_player/utils/custom_text_style.dart';
+import 'package:speedy_music_player/widgets/my_button.dart';
+
+class PlayerScreen extends StatefulWidget {
+  final LocalSongModel song;
+  final int index;
+
+  const PlayerScreen({super.key, required this.song, required this.index});
+
+  @override
+  State<PlayerScreen> createState() => _PlayerScreenState();
+}
+
+class _PlayerScreenState extends State<PlayerScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final audioController = AudioController();
+    bool isPlaying = false;
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 80,
+        title: Text("Now Playing", style: myTextStyle24(fontWeight: .bold)),
+        leading: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: MyButton(
+            onPress: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios_new_rounded),
+          ),
+        ),
+        actions: [
+          MyButton(child: Icon(Icons.more_vert_rounded), onPress: () {}),
+          SizedBox(width: 12),
+        ],
+        backgroundColor: AppColors.secondary,
+      ),
+      backgroundColor: AppColors.secondary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(20),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    "lib/assets/animations/music-new.json",
+                    height: 300,
+                    width: 300,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 30,
+                    child: Marquee(
+                      blankSpace: 30,
+                      startPadding: 30,
+                      velocity: 30,
+                      style: myTextStyle18(fontColor: Colors.black45),
+                      text: widget.song.title.toString().split("/").last,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(widget.song.artist, style: myTextStyle15()),
+                  SizedBox(height: 20),
+                  // Seekbar
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: StreamBuilder<Duration>(
+                      stream: audioController.audioPlayer.positionStream,
+                      builder: (context, snapshot) {
+                        final position = snapshot.data ?? Duration.zero;
+                        final duration = audioController.audioPlayer.duration ?? Duration.zero;
+                        return ProgressBar(
+                          progress: position,
+                          total: duration,
+                          progressBarColor: AppColors.primary,
+                          baseBarColor: Colors.black12,
+                          thumbColor: AppColors.primary,
+                          onSeek: (duration) {
+                            audioController.audioPlayer.seek(duration);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MyButton(
+                        onPress: audioController.previousSong,
+                        child: Icon(Icons.skip_previous_rounded,size: 30,),
+                      ),
+                      StreamBuilder<PlayerState>(
+                        stream: audioController.audioPlayer.playerStateStream,
+                        builder: (context, snapshot) {
+                          final playerState = snapshot.data;
+                          final playing = playerState?.playing == true;
+
+                          return MyButton(
+                            btnBackground: AppColors.primary,
+                            onPress: audioController.togglePlayPause,
+                            child: Icon(
+                              playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                              size: 40,
+                            ),
+                          );
+                        },
+                      ),
+                      MyButton(
+                        onPress: audioController.nextSong,
+                        child: Icon(Icons.skip_next_rounded,size: 30,),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

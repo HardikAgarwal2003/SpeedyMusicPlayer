@@ -5,11 +5,13 @@ import 'package:speedy_music_player/model/local_song_model.dart';
 import 'package:speedy_music_player/widgets/my_button.dart';
 import 'package:speedy_music_player/widgets/my_container.dart';
 
+import '../screens/player_screen.dart';
 import '../utils/custom_text_style.dart';
 
 class SongListItem extends StatefulWidget {
   final LocalSongModel song;
   final index;
+
   const SongListItem({super.key, required this.song, required this.index});
 
   @override
@@ -70,23 +72,26 @@ class _SongListItemState extends State<SongListItem> {
                       ),
                       SizedBox(width: 8),
                       MyButton(
+                        onPress: audioController.togglePlayPause,
                         child: Icon(
                           isCurrentSong && isPlaying
                               ? Icons.pause_rounded
                               : Icons.play_arrow_rounded,
-                          color: isCurrentSong && isPlaying
-                              ? AppColors.primary
-                              : Colors.white54,
+                          color: isCurrentSong && isPlaying ? AppColors.primary : Colors.white54,
                           size: 27,
                         ),
-                        onPress: () {},
                       ),
                     ],
                   ),
                   // adding onTap for the listView
                   onTap: () {
                     audioController.playSong(widget.index);
-                    /*Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerScreen()));*/
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerScreen(song: widget.song, index: widget.index),
+                      ),
+                    );
                   },
                 ),
               ),

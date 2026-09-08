@@ -19,7 +19,8 @@
    - button
    - container
    - bottom_bar
-9. 
+9. Create Home Screen and take audio permission inside home screen.
+10. Create Player Screen.
 
 
 ## Add in next commit - Added Colors and custom TextStyles
