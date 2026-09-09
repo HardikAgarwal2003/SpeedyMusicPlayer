@@ -61,18 +61,32 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     fit: BoxFit.cover,
                   ),
                   SizedBox(height: 30),
-                  SizedBox(
-                    height: 30,
-                    child: Marquee(
-                      blankSpace: 30,
-                      startPadding: 30,
-                      velocity: 30,
-                      style: myTextStyle18(fontColor: Colors.black45),
-                      text: widget.song.title.toString().split("/").last,
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: audioController.currentIndex,
+                    builder: (context, index, child) {
+                      final song = audioController.currentSong;
+
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 30,
+                            child: Marquee(
+                              blankSpace: 30,
+                              startPadding: 30,
+                              velocity: 30,
+                              style: myTextStyle18(fontColor: Colors.black45),
+                              text: song?.title.toString().split("/").last ?? "",
+                            ),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            song?.artist ?? "Unknown Artist",
+                            style: myTextStyle15(),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                  SizedBox(height: 6),
-                  Text(widget.song.artist, style: myTextStyle15()),
                   SizedBox(height: 20),
                   // Seekbar
                   Padding(
@@ -114,7 +128,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             onPress: audioController.togglePlayPause,
                             child: Icon(
                               playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                              size: 40,
+                              size: 45,
                             ),
                           );
                         },
