@@ -21,3 +21,11 @@
    - bottom_bar
 9. Create Home Screen and take audio permission inside home screen.
 10. Create Player Screen.
+11. feat(audio): integrate local on_audio_query and fix playback
+    - Integrate on_audio_query+android-1.3.0 as a local dependency
+    - Update permissions to request audio access only
+    - Fix play/pause toggle functionality in the Home Music List
+12. feat(ui): add animated vinyl player and tone arm
+    - Add vinyl record UI component with rotating animation
+    - Sync vinyl rotation with song play/pause state
+    - Add animated tone arm to simulate a realistic vinyl player experience

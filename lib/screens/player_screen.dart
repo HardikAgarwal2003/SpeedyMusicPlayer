@@ -1,13 +1,15 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
 import 'package:speedy_music_player/constants/app_colors.dart';
 import 'package:speedy_music_player/controller/audio_controller.dart';
 import 'package:speedy_music_player/model/local_song_model.dart';
 import 'package:speedy_music_player/utils/custom_text_style.dart';
 import 'package:speedy_music_player/widgets/my_button.dart';
+import 'package:speedy_music_player/widgets/vinyl_record.dart';
+import 'package:speedy_music_player/widgets/tone_arm.dart';
+
 
 class PlayerScreen extends StatefulWidget {
   final LocalSongModel song;
@@ -54,11 +56,57 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Lottie.asset(
-                    "lib/assets/animations/music-new.json",
-                    height: 300,
-                    width: 300,
-                    fit: BoxFit.cover,
+                  ValueListenableBuilder<int>(
+                    valueListenable: audioController.currentIndex,
+                    builder: (context, currentIndex, child) {
+                      final currentSong = audioController.currentSong ?? widget.song;
+                      final recordSize = MediaQuery.of(context).size.width - 48;
+
+                      return ValueListenableBuilder<bool>(
+                        valueListenable: audioController.isPlaying,
+                        builder: (context, isPlaying, child) {
+                          return SizedBox(
+                            width: recordSize,
+                            height: recordSize,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Center(
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 1000),
+                                    switchInCurve: Curves.easeOutBack,
+                                    switchOutCurve: Curves.easeIn,
+                                    transitionBuilder: (child, animation) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: ScaleTransition(
+                                          scale: Tween<double>(
+                                            begin: 0.78,
+                                            end: 1.0,
+                                          ).animate(animation),
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                    child: VinylRecord(
+                                      key: ValueKey(currentSong.id),
+                                      song: currentSong,
+                                      isPlaying: isPlaying,
+                                      size: recordSize,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -6,
+                                  right: 8,
+                                  child: ToneArm(isPlaying: isPlaying),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                   SizedBox(height: 30),
                   ValueListenableBuilder<int>(

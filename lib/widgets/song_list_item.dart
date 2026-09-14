@@ -4,6 +4,7 @@ import 'package:speedy_music_player/controller/audio_controller.dart';
 import 'package:speedy_music_player/model/local_song_model.dart';
 import 'package:speedy_music_player/widgets/my_button.dart';
 import 'package:speedy_music_player/widgets/my_container.dart';
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 import '../screens/player_screen.dart';
 import '../utils/custom_text_style.dart';
@@ -39,16 +40,45 @@ class _SongListItemState extends State<SongListItem> {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
               child: MyContainer(
+                isPressed: isCurrentSong,
                 child: ListTile(
                   contentPadding: EdgeInsets.all(12),
-                  leading: Container(
+                  leading: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOut,
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: isCurrentSong
+                          ? [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.45),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                          : null,
                     ),
-                    child: Icon(Icons.music_note, color: Colors.white54),
+                    child: QueryArtworkWidget(
+                      controller: audioController.audioQuery,
+                      id: widget.song.id,
+                      type: ArtworkType.AUDIO,
+                      artworkWidth: 50,
+                      artworkHeight: 50,
+                      artworkFit: BoxFit.cover,
+                      artworkBorder: BorderRadius.circular(10),
+                      nullArtworkWidget: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.music_note_rounded,
+                          color: Colors.white54,
+                        ),
+                      ),
+                    ),
                   ),
                   title: Text(
                     widget.song.title,

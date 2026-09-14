@@ -39,11 +39,12 @@ class AudioController {
       }
     });
 
-    // here we listen to position changes
-    audioPlayer.positionStream.listen((_) {
-      // this helps to update the progress bar in UI
-      isPlaying.notifyListeners();
-    });
+    // here we listen to position changes...
+    // - commented because it causes blinking of record image every second of progress of song
+    // audioPlayer.positionStream.listen((_) {
+    //   // this helps to update the progress bar in UI
+    //   isPlaying.notifyListeners();
+    // });
   }
 
   // here we create function to load song
