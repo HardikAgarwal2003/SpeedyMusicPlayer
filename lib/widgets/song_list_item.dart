@@ -10,7 +10,7 @@ import '../utils/custom_text_style.dart';
 
 class SongListItem extends StatefulWidget {
   final LocalSongModel song;
-  final index;
+  final int index;
 
   const SongListItem({super.key, required this.song, required this.index});
 
@@ -72,7 +72,7 @@ class _SongListItemState extends State<SongListItem> {
                       ),
                       SizedBox(width: 8),
                       MyButton(
-                        onPress: audioController.togglePlayPause,
+                        onPress: () => audioController.playSong(widget.index),
                         child: Icon(
                           isCurrentSong && isPlaying
                               ? Icons.pause_rounded

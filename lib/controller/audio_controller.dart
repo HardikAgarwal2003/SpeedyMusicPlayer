@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -7,6 +5,7 @@ import 'package:speedy_music_player/model/local_song_model.dart';
 
 class AudioController {
   static final AudioController instance = AudioController._instance();
+
   factory AudioController() => instance;
 
   AudioController._instance() {
@@ -15,8 +14,7 @@ class AudioController {
 
   final AudioPlayer audioPlayer = AudioPlayer();
   final OnAudioQuery audioQuery = OnAudioQuery();
-  final ValueNotifier<List<LocalSongModel>> songs =
-      ValueNotifier<List<LocalSongModel>>([]);
+  final ValueNotifier<List<LocalSongModel>> songs = ValueNotifier<List<LocalSongModel>>([]);
   final ValueNotifier<int> currentIndex = ValueNotifier<int>(-1);
   final ValueNotifier<bool> isPlaying = ValueNotifier<bool>(false);
 
@@ -156,7 +154,6 @@ class AudioController {
 //      │             │               │
 //      ▼             ▼               ▼
 //  Speaker      Phone Storage    Flutter Widgets
-
 
 // Basic Controller flow for the application
 
